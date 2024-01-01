@@ -19,11 +19,21 @@ export default function DeleteCustomer({
     const { destroyCustomer } = GetFile();
 
     const handleDelete = async () => {
-        const response = await destroyCustomer(selectedCustomerId);
-        dispatch(deleteCustomer(selectedCustomerId));
+        try {
+            const response = await destroyCustomer(selectedCustomerId);
+            console.log("API Response:", response);
 
-        dispatch(setSelectedCustomerId(null));
-        setShowDeleteCustomer(false);
+            console.log("id : ", selectedCustomerId);
+            if (response.status === 200) {
+                dispatch(deleteCustomer(selectedCustomerId));
+                dispatch(setSelectedCustomerId(null));
+                setShowDeleteCustomer(false);
+            } else {
+                console.error("Error deleting customer:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Error deleting customer:", error.message);
+        }
     };
     return (
         <>

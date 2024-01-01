@@ -35,7 +35,14 @@ export default function Table() {
     }, [customers]);
 
     const handleShowAddCustomer = () => setShowAddCustomer(true);
-    const handleShowDeleteCustomer = () => setShowDeleteCustomer(true);
+    const handleShowDeleteCustomer = (customerId) => {
+        console.log(
+            "Opening DeleteCustomer modal for customer ID:",
+            customerId
+        );
+        dispatch(setSelectedCustomerId(customerId));
+        setShowDeleteCustomer(true);
+    };
 
     const tableGrid =
         "grid gap-2 px-4 xl-px-0 grid-cols-5 max-[992px]:grid-cols-[1fr] max-[1440px]:grid-cols-[1fr_1fr_1fr_1fr_1fr]  items-center rounded-[10px] mb-[38px] ";
@@ -107,9 +114,6 @@ export default function Table() {
                             </button>
                             <button
                                 onClick={() => {
-                                    dispatch(
-                                        setSelectedCustomerId(customer._id)
-                                    );
                                     handleShowDeleteCustomer(customer._id);
                                 }}
                                 className="py-[9px] px-[30px]  w-full xl:max-w-[106px] text-[16px] font-semibold text-red-700 bg-red-700 bg-opacity-[.4] rounded-[5px]"
