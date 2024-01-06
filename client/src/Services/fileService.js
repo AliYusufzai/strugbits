@@ -7,6 +7,9 @@ export const GetFile = () => {
   const postCustomer = (data) => {
     return axiosInstance.post(`${baseUrl}/api/`, data);
   };
+  const updateCustomer = (id, data) => {
+    return axiosInstance.patch(`${baseUrl}/api/${id}`, data);
+  };
 
   const getCustomer = () => {
     return axiosInstance.get(`${baseUrl}/api/`);
@@ -25,5 +28,6 @@ export const GetFile = () => {
     getCustomer,
     getSingleCustomer,
     destroyCustomer,
+    updateCustomer
   };
 };

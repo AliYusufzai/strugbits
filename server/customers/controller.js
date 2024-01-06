@@ -81,7 +81,32 @@ module.exports = {
     }
   },
 
-  update: async (req, res) => {},
+  update: async (req, res) => {
+    const { customerId } = req.params;
+    const updatedData = req.body;
+
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      updatedData.profilePicture = result.secure_url;
+    }
+
+    const customer = await Customer.findByIdAndUpdate(customerId, updatedData, {
+      new: true
+    });
+
+    if (!customer) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Customer not found" });
+    }
+
+    const updatedCustomer = await Customer.findById(customerId);
+    return res.status(201).json({
+      success: true,
+      message: "Customer updated successfully",
+      data: updatedCustomer
+    });
+  },
 
   destroy: async (req, res) => {
     try {

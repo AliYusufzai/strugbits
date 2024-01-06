@@ -6,7 +6,7 @@ const { upload } = require("../config/upload");
 router.post("/", upload.single("image"), create);
 router.get("/", index);
 router.get("/:customerId", show);
-router.patch("/", update);
+router.patch("/:customerId", upload.single("image"), update);
 router.delete("/:customerId", destroy);
 
 module.exports = router;

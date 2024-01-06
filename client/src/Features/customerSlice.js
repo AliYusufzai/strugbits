@@ -1,37 +1,48 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const customerSlice = createSlice({
-    name: "customer",
-    initialState: {
-        data: [],
+  name: "customer",
+  initialState: {
+    data: [],
+    customerId: null
+  },
+  reducers: {
+    setCustomers: (state, action) => {
+      state.data = action.payload;
     },
-    reducers: {
-        setCustomers: (state, action) => {
-            state.data = action.payload;
-        },
-        addCustomer: (state, action) => {
-            state.data.push(action.payload);
-        },
-        deleteCustomer: (state, action) => {
-            console.log("Deleting customer with ID:", action.payload);
-            state.data = state.data.filter(
-                (customer) => customer.id !== action.payload
-            );
-        },
-        setSelectedCustomerId: (state, action) => {
-            console.log("Setting selected customer ID:", action.payload);
-            state.selectedCustomerId = action.payload;
-        },
+    addCustomer: (state, action) => {
+      state.data.push(action.payload);
     },
+    deleteCustomer: (state, action) => {
+      const deleteCustomerId = action.payload;
+      state.data.splice(deleteCustomerId, 1);
+      if (state.customerId === deleteCustomerId) {
+        state.customerId = null;
+      }
+    },
+    updatedCustomer: (state, action) => {
+      const newCustomer = action.payload;
+      const index = state.data.findIndex(
+        (customer) => customer._id === newCustomer._id
+      );
+      if (index !== -1) {
+        state.data[index] = newCustomer;
+      }
+    },
+    setCustomerId: (state, action) => {
+      state.customerId = action.payload;
+    }
+  }
 });
 
 export const {
-    setCustomers,
-    addCustomer,
-    deleteCustomer,
-    setSelectedCustomerId,
+  setCustomers,
+  addCustomer,
+  setCustomerId,
+  deleteCustomer,
+  updatedCustomer
 } = customerSlice.actions;
-export const selectCustomers = (state) => state.customer.data;
-export const selectCustomersId = (state) => state.customer.selectedCustomerId;
 
+export const selectCustomers = (state) => state.customer.data;
+export const selectCustomerId = (state) => state.customer.customerId;
 export default customerSlice.reducer;
