@@ -21,11 +21,26 @@ export default function Table() {
   const [showAddCustomer, setShowAddCustomer] = useState(false);
   const [showDeleteCustomer, setShowDeleteCustomer] = useState(false);
   const [showEditCustomer, setShowEditCustomer] = useState(false);
+  const [sortField, setSortField] = useState("username");
+  const [sortOrder, setSortOrder] = useState("asc");
+
+  const handleSort = (field) => {
+    setSortField((prevField) => {
+      if (field === prevField) {
+        setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+        return prevField;
+      } else {
+        setSortField(field);
+        setSortOrder("asc");
+        return field;
+      }
+    });
+  };
 
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const response = await getCustomer();
+        const response = await getCustomer(sortField, sortOrder);
         dispatch(setCustomers(response.data.data));
       } catch (error) {
         console.error("Error fetching customer data:", error.message);
@@ -33,7 +48,7 @@ export default function Table() {
     };
 
     fetchCustomers();
-  }, [dispatch]);
+  }, [dispatch, sortField, sortOrder]);
 
   //Handling Modal functionality Starts here
   const handleShowAddCustomer = () => setShowAddCustomer(true);
@@ -85,15 +100,24 @@ export default function Table() {
           className={`tableHeader py-[14px]  bg-green-300 bg-opacity-[.3] ${tableGrid}`}
         >
           <div></div>
-          <button className="hover:underline flex items-center gap-2 bg-none text-[18px] max-[1440px]:text-[14px] font-bold text-green-400">
+          <button
+            onClick={() => handleSort("username")}
+            className="hover:underline flex items-center gap-2 bg-none text-[18px] max-[1440px]:text-[14px] font-bold text-green-400"
+          >
             Username
             <FaSort />
           </button>
-          <button className="hover:underline flex items-center gap-2 bg-none text-[18px] max-[1440px]:text-[14px] font-bold text-green-400">
+          <button
+            onClick={() => handleSort("fullname")}
+            className="hover:underline flex items-center gap-2 bg-none text-[18px] max-[1440px]:text-[14px] font-bold text-green-400"
+          >
             Customer Name
             <FaSort />
           </button>
-          <button className="hover:underline flex items-center gap-2 bg-none text-[18px] max-[1440px]:text-[14px] font-bold text-green-400">
+          <button
+            onClick={() => handleSort("email")}
+            className="hover:underline flex items-center gap-2 bg-none text-[18px] max-[1440px]:text-[14px] font-bold text-green-400"
+          >
             Email
             <FaSort />
           </button>

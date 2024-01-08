@@ -11,8 +11,9 @@ export const GetFile = () => {
     return axiosInstance.patch(`${baseUrl}/api/${id}`, data);
   };
 
-  const getCustomer = () => {
-    return axiosInstance.get(`${baseUrl}/api/`);
+  const getCustomer = (sortField, sortOrder) => {
+    const params = { sortField, sortOrder };
+    return axiosInstance.get(`${baseUrl}/api/`, { params });
   };
 
   const getSingleCustomer = (id) => {

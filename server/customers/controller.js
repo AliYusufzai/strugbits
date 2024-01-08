@@ -33,9 +33,11 @@ module.exports = {
 
   index: async (req, res) => {
     try {
-      const customers = await Customer.find({ isdeleted: 0 }).select(
-        "-isdeleted"
-      );
+      const sortField = req.query.sortField || "createdAt";
+      const sortOrder = req.query.sortOrder === "desc" ? -1 : 1;
+      const customers = await Customer.find({ isdeleted: 0 })
+        .select("-isdeleted")
+        .sort({ [sortField]: sortOrder });
       if (customers.length < 1) {
         return res
           .status(404)
